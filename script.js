@@ -1,13 +1,15 @@
 let title = prompt("Как называется ваш проект"),
 	screens = prompt("Какие типы экранов нужно разработать?", "Простые / Сложные / Интерактивные"),
 	screenPrice = +prompt("Сколько будет стоить данная работа?", "12000"),
-	rollback = 75,
 	service1 = prompt("Какой дополнительный тип услуги нужен?"),
 	servicePrice1 = +prompt("Сколько это будет стоить?"),
 	service2 = prompt("Какой дополнительный тип услуги нужен?"),
-	servicePrice2 = +prompt("Сколько это будет стоить?");
-	fullPrice = screenPrice + servicePrice1 + servicePrice2,
+	servicePrice2 = +prompt("Сколько это будет стоить?"),
 	adaptive = confirm("Нужен ли адаптив на сайте?");
+	
+const fullPrice = screenPrice + servicePrice1 + servicePrice2,
+	rollback = 75,
+	servicePercentPrice = fullPrice - (fullPrice * (rollback / 100));
 
 console.log(typeof title, typeof fullPrice, typeof adaptive);
 console.log(screens.length);
@@ -16,7 +18,6 @@ console.log(`Стоимость разработки сайта ${fullPrice} р�
 console.log(screens.toLowerCase().split(", "));
 console.log(`Процент отката посреднику за работу (${fullPrice} * (${rollback} / 100))`);
 
-const servicePercentPrice = fullPrice - (fullPrice * (rollback / 100));
 console.log(Math.ceil(servicePercentPrice));
 
 switch(true) {
