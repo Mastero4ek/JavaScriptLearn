@@ -1,4 +1,4 @@
-let title = getTitle(prompt("Как называется ваш проект")),
+const title = getTitle(prompt("Как называется ваш проект")),
 	screens = prompt("Какие типы экранов нужно разработать?", "Простые / Сложные / Интерактивные"),
 	screenPrice = +prompt("Сколько будет стоить данная работа?", "12000"),
 	service1 = prompt("Какой дополнительный тип услуги нужен?"),
@@ -14,40 +14,34 @@ const showTypeOf = function (variable) {
 const getRollbackMessage = function(price) {
 	switch(true) {
 		case price >= 30000:
-			return "Даем скидку в 10%"
-			break
+			return "Даем скидку в 10%";
 
 		case price >= 15000 && price < 30000:
-			return "Даем скидку в 5%"
-			break
+			return "Даем скидку в 5%";
 
 		case price < 15000 && price >= 0:
-			return "Скидка не предусмотрена"
-			break
+			return "Скидка не предусмотрена";
 			
 		default:
-			return "Что то пошло не так"
-			break
+			return "Что то пошло не так";
 	}
 }
 
 const getAllServicePrices = function(price1, price2) {
-	return price1 + price2
+	return price1 + price2;
 }
 
 function getFullPrice(price1, price2) {
-	return price1 + price2
+	return price1 + price2;
 }
 
 function getServicePercentPrices(price1, price2) {
-	return price1 - (price1 * (price2 / 100))
+	return price1 - (price1 * (price2 / 100));
 }
 
 function getTitle(str) {
-	let strNew = str.trim();
-
-	return strNew.charAt(0).toUpperCase() + strNew.slice(1).toLowerCase()
-	//return title.charAt(0).toUpperCase() + title.slice(1).toLowerCase()
+	str = str.trim();
+	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
 const allServicePrices = getAllServicePrices(servicePrice1, servicePrice2),
