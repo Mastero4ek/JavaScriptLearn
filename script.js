@@ -7,7 +7,9 @@ let title,
 
 //проверяем являются ли введеные данные числом
 const isNumber = function(num) {
-	return !isNaN(parseFloat(num)) && isFinite(num);
+	return !isNaN(parseFloat(num)) &&
+	isFinite(num) &&
+	!(num.startsWith(' ') || num.endsWith(' '));
 }
 
 const asking = function() {
@@ -18,6 +20,7 @@ const asking = function() {
 		screenPrice = prompt("Сколько будет стоить данная работа?");
 	}
 	while(!isNumber(screenPrice));
+	screenPrice = +screenPrice;
 
 	adaptive = confirm("Нужен ли адаптив на сайте?");
 }
@@ -55,9 +58,10 @@ const getAllServicePrices = function() {
 		do {
 			sum = prompt("Сколько это будет стоить?");
 		} while(!isNumber(sum));
+		sum = +sum;
 	}
 	
-	return +sum + +sum;
+	return sum + sum;
 }
 
 function getFullPrice(price1, price2) {
@@ -76,7 +80,7 @@ function getTitle(str) {
 asking();
 
 const allServicePrices = getAllServicePrices(),
-	fullPrice = getFullPrice(+screenPrice, allServicePrices),
+	fullPrice = getFullPrice(screenPrice, allServicePrices),
 	rollback = 75,
 	servicePercentPrice = fullPrice - (fullPrice * (rollback / 100));
 
