@@ -1,11 +1,26 @@
-const title = getTitle(prompt("Как называется ваш проект")),
-	screens = prompt("Какие типы экранов нужно разработать?", "Простые / Сложные / Интерактивные"),
-	screenPrice = +prompt("Сколько будет стоить данная работа?", "12000"),
-	service1 = prompt("Какой дополнительный тип услуги нужен?"),
-	servicePrice1 = +prompt("Сколько это будет стоить?"),
-	service2 = prompt("Какой дополнительный тип услуги нужен?"),
-	servicePrice2 = +prompt("Сколько это будет стоить?"),
+let title,
+	screens,
+	screenPrice,
+	adaptive,
+	service1,
+	service2;
+
+//проверяем являются ли введеные данные числом
+const isNumber = function(num) {
+	return !isNaN(parseFloat(num)) && isFinite(num);
+}
+
+const asking = function() {
+	title = getTitle(prompt("Как называется ваш проект", "Калькулятор верстки"));
+	screens = prompt("Какие типы экранов нужно разработать?", "Простые / Сложные / Интерактивные");
+	
+	do {
+		screenPrice = prompt("Сколько будет стоить данная работа?");
+	}
+	while(!isNumber(screenPrice));
+
 	adaptive = confirm("Нужен ли адаптив на сайте?");
+}
 
 const showTypeOf = function (variable) {
 	console.log(variable, typeof variable);
@@ -27,8 +42,22 @@ const getRollbackMessage = function(price) {
 	}
 }
 
-const getAllServicePrices = function(price1, price2) {
-	return price1 + price2;
+const getAllServicePrices = function() {
+	let sum = 0;
+
+	for(let i = 0; i < 2; i++) {
+		if(i === 0) {
+			service1 = prompt("Какой дополнительный тип услуги нужен?");
+		} else if(i === 1) {
+			service2 = prompt("Какой дополнительный тип услуги нужен?");
+		}
+
+		do {
+			sum = prompt("Сколько это будет стоить?");
+		} while(!isNumber(sum));
+	}
+	
+	return +sum + +sum;
 }
 
 function getFullPrice(price1, price2) {
@@ -44,8 +73,10 @@ function getTitle(str) {
 	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-const allServicePrices = getAllServicePrices(servicePrice1, servicePrice2),
-	fullPrice = getFullPrice(screenPrice, allServicePrices),
+asking();
+
+const allServicePrices = getAllServicePrices(),
+	fullPrice = getFullPrice(+screenPrice, allServicePrices),
 	rollback = 75,
 	servicePercentPrice = fullPrice - (fullPrice * (rollback / 100));
 
