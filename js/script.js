@@ -36,7 +36,6 @@ const appData = {
 	init: function() {
 		appData.addTitle();
 		appData.getRollback();
-
 		startBtn.addEventListener('click', appData.start);
 		buttonPlus.addEventListener('click', appData.addScreenBlock);
 	},
@@ -69,7 +68,6 @@ const appData = {
 				input.value === "Количество экранов") {
 
 				appData.init();
-			console.log(appData);
 			} else {
 				appData.screens.push({
 					id: index,
@@ -82,9 +80,9 @@ const appData = {
 	},
 	addServices: function() {
 		otherItemsPercent.forEach(function(item) {
-			const check = item.querySelector('input[type=checkbox'),
+			const check = item.querySelector('input[type=checkbox]'),
 				label = item.querySelector('label'),
-				input = item.querySelector('input[type=text');
+				input = item.querySelector('input[type=text]');
 
 				if(check.checked) {
 					appData.servicesPercent[label.textContent] = +input.value;
@@ -92,9 +90,9 @@ const appData = {
 		});
 
 		otherItemsNumber.forEach(function(item) {
-			const check = item.querySelector('input[type=checkbox'),
+			const check = item.querySelector('input[type=checkbox]'),
 				label = item.querySelector('label'),
-				input = item.querySelector('input[type=text');
+				input = item.querySelector('input[type=text]');
 
 				if(check.checked) {
 					appData.servicesNumber[label.textContent] = +input.value;
@@ -105,7 +103,6 @@ const appData = {
 		screens = document.querySelectorAll('.screen');
 
 		const cloneScreen = screens[0].cloneNode(true);
-
 		screens[screens.length - 1].after(cloneScreen);
 	},
 	addPrices: function() {
@@ -131,10 +128,13 @@ const appData = {
 	},
 	getRollback: function() {
 		inputRange.value = 0;
+		inputRangeValue.textContent = '0%';
 
 		inputRange.addEventListener('input', () => {
 			inputRangeValue.textContent = inputRange.value + '%';
-			appData.rollback = inputRange.value;
+			appData.rollback = +inputRange.value;
+
+			totalCountRollback.value = inputRange.value * appData.screensCount;
 		});
 	},
 	logger: function() {
