@@ -20,7 +20,10 @@ const title = document.getElementsByTagName('h1')[0],
 	totalCountRollback = document.getElementsByClassName('total-input')[4],
 
 	cms = document.querySelector('.cms'),
-	cmsHidden = document.querySelector('.hidden-cms-variants');
+	cmsHidden = document.querySelector('.hidden-cms-variants'),
+	checkCms = cms.querySelector('input[type=checkbox]'),
+	selectCms = cmsHidden.querySelector('.main-controls__select > select'),
+	optionCms = cmsHidden.querySelector('.main-controls__input');
 
 let screens = document.querySelectorAll('.screen'),
 	mainControleSelect = document.querySelectorAll('.screen > .main-controls__select > select'),
@@ -42,7 +45,7 @@ const appData = {
 	init: function() {
 		this.addTitle();
 		this.getRollback();
-		this.addOption();
+		this.addOptionCms();
 
 		startBtn.addEventListener('click', () => {
 			this.checkScreens();
@@ -83,6 +86,7 @@ const appData = {
 		this.removeScreens();
 		this.clearAppData();
 		this.clearInput();
+		this.removeOptionCms();
 	},
 	disabled: function() {
 		mainControleSelect.forEach((item) => {
@@ -202,18 +206,36 @@ const appData = {
 				}
 		});
 	},
-	addOption: function() {
-		const check = cms.querySelector('input[type=checkbox]'),
-			label = cmsHidden.querySelector('label'),
-			input = cmsHidden.querySelector('input[type=text]');
+	addOptionCms: function() {
+		selectCms.addEventListener('change', () => {
+			switch(true) {
 
-		check.addEventListener('change', () => {
-			if(check.checked) {
-				cmsHidden.style.display = 'flex';
-			} else {
-				cmsHidden.style.display = 'none';
+			case selectCms.value == 'other':
+				return optionCms.style.display = 'block';
+
+			case +selectCms.value == 50:
+				return optionCms.style.display = 'none';
+				
+			default:
+				return optionCms.style.display = 'none';
 			}
 		});
+
+		checkCms.addEventListener('change', () => {
+			if(checkCms.checked) {
+				cmsHidden.style.display = 'flex';
+			} else {
+				selectCms.value = '';
+				cmsHidden.style.display = 'none';
+				optionCms.style.display = 'none';
+			}
+		});
+	},
+	removeOptionCms: function() {
+		checkCms.checked = false;
+		selectCms.value = '';
+		cmsHidden.style.display = 'none';
+		optionCms.style.display = 'none';
 	},
 	addScreenBlock: function() {
 		screens = document.querySelectorAll('.screen');
@@ -242,7 +264,13 @@ const appData = {
 			this.servicePricesPercent += this.screenPrice * (this.servicesPercent[key] / 100);
 		}
 
-		this.fullPrice = +this.screenPrice + this.servicePricesNumber + this.servicePricesPercent;
+		if(+selectCms.value == 50) {
+			this.fullPrice = (+this.screenPrice + this.servicePricesNumber + this.servicePricesPercent) +
+							(+this.screenPrice + this.servicePricesNumber + this.servicePricesPercent) *
+							selectCms.value / 100;
+		} else {
+			this.fullPrice = +this.screenPrice + this.servicePricesNumber + this.servicePricesPercent;
+		}
 
 		this.servicePercentPrice = this.fullPrice - (this.fullPrice * (this.rollback / 100));
 	},
