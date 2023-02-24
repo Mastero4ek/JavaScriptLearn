@@ -17,7 +17,10 @@ const title = document.getElementsByTagName('h1')[0],
 	totalCount = document.getElementsByClassName('total-input')[1],
 	totalCountOther = document.getElementsByClassName('total-input')[2],
 	fullTotalCount = document.getElementsByClassName('total-input')[3],
-	totalCountRollback = document.getElementsByClassName('total-input')[4];
+	totalCountRollback = document.getElementsByClassName('total-input')[4],
+
+	cms = document.querySelector('.cms'),
+	cmsHidden = document.querySelector('.hidden-cms-variants');
 
 let screens = document.querySelectorAll('.screen'),
 	mainControleSelect = document.querySelectorAll('.screen > .main-controls__select > select'),
@@ -39,19 +42,10 @@ const appData = {
 	init: function() {
 		this.addTitle();
 		this.getRollback();
+		this.addOption();
 
 		startBtn.addEventListener('click', () => {
-			screens.forEach((screen, index) => {
-				const select = screen.querySelector('select'),
-					input = screen.querySelector('input'),
-					selectName = select.options[select.selectedIndex].textContent;
-				
-				if(selectName == "Тип экранов" ||
-					input.value == "" ||
-					+input.value == 0) return;
-
-				this.start();
-			});
+			this.checkScreens();
 		});
 
 		resetBtn.addEventListener('click', () => {
@@ -62,6 +56,19 @@ const appData = {
 	},
 	addTitle: function() {
 		document.title = title.textContent;
+	},
+	checkScreens: function() {
+		screens.forEach((screen, index) => {
+			const select = screen.querySelector('select'),
+				input = screen.querySelector('input'),
+				selectName = select.options[select.selectedIndex].textContent;
+			
+			if(selectName == "Тип экранов" ||
+				input.value == "" ||
+				+input.value == 0) return;
+
+			this.start();
+		});
 	},
 	start: function() {
 		this.addScreens();
@@ -162,7 +169,7 @@ const appData = {
 				name: selectName,
 				price: +select.value * +input.value,
 				count: +input.value
-			 });
+			});
 		});
 	},
 	removeScreens: function() {
@@ -193,6 +200,19 @@ const appData = {
 				if(check.checked) {
 					this.servicesNumber[label.textContent] = +input.value;
 				}
+		});
+	},
+	addOption: function() {
+		const check = cms.querySelector('input[type=checkbox]'),
+			label = cmsHidden.querySelector('label'),
+			input = cmsHidden.querySelector('input[type=text]');
+
+		check.addEventListener('change', () => {
+			if(check.checked) {
+				cmsHidden.style.display = 'flex';
+			} else {
+				cmsHidden.style.display = 'none';
+			}
 		});
 	},
 	addScreenBlock: function() {
@@ -232,9 +252,9 @@ const appData = {
 
 		inputRange.addEventListener('input', () => {
 			inputRangeValue.textContent = inputRange.value + '%';
-			appData.rollback = +inputRange.value;
+			this.rollback = +inputRange.value;
 
-			totalCountRollback.value = inputRange.value * appData.screensCount;
+			totalCountRollback.value = inputRange.value * this.screensCount;
 		});
 	},
 	logger: function() {
